@@ -16,6 +16,7 @@ public class TestMobile {
 
     private static Driver driver;
     private static AppiumDriver appiumDriver;
+    private Calculadora calculadora;
 
         @Before
         public void inicializarTeste () throws MalformedURLException {
@@ -39,19 +40,19 @@ public class TestMobile {
             deviceCapabilities.setCapability("appActivity", "com.android.calculator2.Calculator");
 
             appiumDriver =  Driver.inicializarDriver("http://0.0.0.0:4723/wd/hub/", deviceCapabilities);
+            calculadora = new Calculadora(appiumDriver);
 
         }
 
-    @After
-    public void finalizarTeste(){
-        appiumDriver.quit();
-        Driver.encerrarAppium();
 
+    @After
+    public void finalizarTeste() {
+        Driver.finalizarDriver(appiumDriver);
     }
 
     @Test
     public void TesteSomaPositivo() {
-            Calculadora calculadora = new Calculadora(appiumDriver);
+
         try {
             Assert.assertEquals( "Valor esperado:", 5, calculadora.operacao("Soma", "SomaPositivo", 2, 3));
         } catch (IOException e) {
@@ -61,7 +62,6 @@ public class TestMobile {
 
     @Test
     public void TesteSomaDezena() {
-        Calculadora calculadora = new Calculadora(appiumDriver);
         try {
             Assert.assertEquals( "Valor esperado:", 87, calculadora.operacao("Soma", "SomaDezena", 12, 75));
         } catch (IOException e) {
@@ -71,9 +71,9 @@ public class TestMobile {
 
     @Test
     public void TesteSubtracaoPositiva() {
-        Calculadora calculadora = new Calculadora(appiumDriver);
         try {
             Assert.assertEquals("Valor esperado:", 17, calculadora.operacao("Subtracao", "SubtracaoPositiva", 42, -25));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,7 +81,6 @@ public class TestMobile {
 
      @Test
      public void TesteSubtracaoNegativa() {
-            Calculadora calculadora = new Calculadora(appiumDriver);
          try {
              Assert.assertEquals("Valor esperado:", 17, calculadora.operacao("Subtracao", "SubtracaoNegativa",  -87, 24));
          } catch (IOException e) {
