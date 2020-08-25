@@ -18,37 +18,29 @@ public class Calculadora {
 
     private void tocarTecla(int numero) {
 
-      //  if (numero <= -1 && numero >= -9) {
-    //        appiumDriver.findElement(By.id("com.google.android.calculator:id/op_sub")).click();
-     //       appiumDriver.findElement(By.id("com.google.android.calculator:id/digit_" + numero)).click();
-    //    }
-
-      //  else {
-            char[] digits = String.valueOf(numero).toCharArray();
-
-
-
-            for (int i = 0; i < digits.length; i++) {
-                if (digits[0] == '-') {
-                    appiumDriver.findElement(By.id("com.google.android.calculator:id/op_sub")).click();
-                    digits = removeCaractere(digits);
-                }
-                appiumDriver.findElement(By.id("com.google.android.calculator:id/digit_" + digits[i])).click();
+        if (numero < 0) {
+            numero = numero * -1; // converte para positivo
+            appiumDriver.findElement(By.id("com.google.android.calculator:id/op_sub")).click();
+            converteEmDigito(numero);
+        } else {
+            appiumDriver.findElement(By.id("com.google.android.calculator:id/op_add")).click();
+            if (numero <= 9 && numero > 1) {
+                appiumDriver.findElement(By.id("com.google.android.calculator:id/digit_" + numero)).click();
             }
-     //   }
-
-    }
-
-    public char[] removeCaractere(char[] original)
-    {
-        char[] novo = new char[original.length-1];
-        for (int i = 0; i < original.length; i++){
-            if (i == 0)
-                i++;
-            novo[i] = original[i];
+            else {
+                converteEmDigito(numero);
+            }
         }
-        return novo;
+
     }
+    private void converteEmDigito(int numero) {
+            String numeroConvertido = String.valueOf(numero);
+            for(int i = 0; i < numeroConvertido.length(); i++) {
+                int digitoExtraido = Character.digit(numeroConvertido.charAt(i), 10);
+                appiumDriver.findElement(By.id("com.google.android.calculator:id/digit_" + digitoExtraido)).click();
+            }
+    }
+
 
     private void tocarIgual(){
         appiumDriver.findElement(By.id("com.google.android.calculator:id/eq")).click();
@@ -66,36 +58,36 @@ public class Calculadora {
     public int operacao(String tipoOperacao, String cenarioTeste, int numero1, int numero2) throws IOException {
         Screenshot calculadoraScreenshot = new Screenshot(appiumDriver);
         tocarTecla(numero1);
+        calculadoraScreenshot.printarTela(nomeApp, cenarioTeste, 1);
         if (tipoOperacao.toUpperCase().equals("SOMA") ){
-            appiumDriver.findElement(By.id("com.google.android.calculator:id/op_add")).click();
+            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste, 2);
             tocarTecla(numero2);
             tocarIgual();
-            Driver.wait(5);
-            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
+            Driver.wait(appiumDriver, 5);
+            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste, 3);
             return numero1 + numero2;
         }
         if (tipoOperacao.toUpperCase().equals("SUBTRACAO")){
-            appiumDriver.findElement(By.id("com.google.android.calculator:id/op_sub")).click();
             tocarTecla(numero2);
             tocarIgual();
-            Driver.wait(3);
-            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
+        //    Driver.wait(3);
+        //    calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
             return numero1 - numero2;
         }
-        if (tipoOperacao.toUpperCase() == "DIVISAO"){
+        if (tipoOperacao.toUpperCase().equals("DIVISAO") ){
             appiumDriver.findElement(By.id("com.google.android.calculator:id/op_div")).click();
             tocarTecla(numero2);
             tocarIgual();
-            Driver.wait(3);
-            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
+         //   Driver.wait(3);
+         //   calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
             return numero1 / numero2;
         }
-        if (tipoOperacao.toUpperCase() == "MULTIPLICACAO"){
+        if (tipoOperacao.toUpperCase().equals("MULTIPLICACAO")){
             appiumDriver.findElement(By.id("com.google.android.calculator:id/op_mul")).click();
             tocarTecla(numero2);
             tocarIgual();
-            Driver.wait(3);
-            calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
+       //     Driver.wait(3);
+       //     calculadoraScreenshot.printarTela(nomeApp, cenarioTeste);
             return numero1 * numero2;
         }
         // Quando vier string fora do padrao, retorna 0

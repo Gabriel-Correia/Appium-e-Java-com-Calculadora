@@ -13,18 +13,21 @@ public class TestWebBrowser {
     public static AndroidDriver androidDriver;
     public static Driver driver;
 
+
+
     public static void main(String[] args) throws MalformedURLException {
 
-        Driver.iniciarAppium();
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability("browserName", "Chrome");
         capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "Redmi9");
-        capabilities.setCapability("deviceID", "023c69fc0005");
+        capabilities.setCapability("deviceName", "Redmi5");
+        capabilities.setCapability("deviceID", "emulator-5554");
         capabilities.setCapability("automationName", "uiautomator2");
+        capabilities.setCapability("appPackage", "com.google.android.calculator");
+        capabilities.setCapability("appActivity", "com.android.calculator2.Calculator");
 
-        androidDriver = (AndroidDriver) driver.inicializarDriver("http://0.0.0.0:4723/wd/hub/", capabilities);
+        androidDriver = (AndroidDriver) Driver.inicializarDriver("http://0.0.0.0:4723/wd/hub/", capabilities);
         androidDriver.get("http://google.com");
         androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -32,7 +35,6 @@ public class TestWebBrowser {
 
         androidDriver.quit();
 
-        Driver.encerrarAppium();
     }
 
 }

@@ -15,9 +15,10 @@ public class Screenshot {
     public Screenshot (AppiumDriver driver) {
         this.driver = driver;
     }
-    public void printarTela(String app, String cenarioTeste) throws IOException {
+    public void printarTela(String app, String cenarioTeste, int numeroPrint) throws IOException {
         File file  = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile (file, new File("C:/Users/gabri/Pictures/Appium/" + app + "/" + cenarioTeste + "/" + "Teste.jpg"));
+        FileUtils.copyFile (file, new File("C:/Users/gabri/Pictures/Appium/" + app + "/" + cenarioTeste + "/" + cenarioTeste + numeroPrint + ".jpg"));
+
     }
 
 
